@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 class SimpleEntityManagerTest extends DatabaseTestBase {
 
@@ -29,8 +30,10 @@ class SimpleEntityManagerTest extends DatabaseTestBase {
 
         Person persist = entityManager.persist(person);
 
-        assertThat(person.getName()).isEqualTo(persist.getName());
-        assertThat(person.getId()).isEqualTo(2L);
+        assertAll(
+                () -> assertThat(person.getName()).isEqualTo(persist.getName()),
+                () -> assertThat(person.getId()).isEqualTo(2L)
+        );
     }
 
     @Test
@@ -62,8 +65,10 @@ class SimpleEntityManagerTest extends DatabaseTestBase {
 
         Person mergedPerson = entityManager.merge(person);
 
-        assertThat(person.getName()).isEqualTo(mergedPerson.getName());
-        assertThat(persistenceContext.getEntityStatus(person)).isEqualTo(Status.MANAGED);
+        assertAll(
+                () -> assertThat(person.getName()).isEqualTo(mergedPerson.getName()),
+                () -> assertThat(persistenceContext.getEntityStatus(person)).isEqualTo(Status.MANAGED)
+        );
     }
 
     @Test
@@ -73,8 +78,10 @@ class SimpleEntityManagerTest extends DatabaseTestBase {
 
         Person mergedPerson = entityManager.merge(person);
 
-        assertThat(person.getName()).isEqualTo(mergedPerson.getName());
-        assertThat(persistenceContext.getEntityStatus(person)).isEqualTo(Status.MANAGED);
+        assertAll(
+                () -> assertThat(person.getName()).isEqualTo(mergedPerson.getName()),
+                () -> assertThat(persistenceContext.getEntityStatus(person)).isEqualTo(Status.MANAGED)
+        );
     }
 
     @Test
@@ -93,8 +100,10 @@ class SimpleEntityManagerTest extends DatabaseTestBase {
             method.invoke(simpleEntityManager, person, field);
         } catch (InvocationTargetException e) {
             Throwable actualException = e.getTargetException();
-            assertThat(actualException instanceof RuntimeException).isEqualTo(true);
-            assertThat("Field 값을 읽어오는데 실패했습니다.").isEqualTo(actualException.getMessage());
+            assertAll(
+                    () -> assertThat(actualException instanceof RuntimeException).isEqualTo(true),
+                    () -> assertThat("Field 값을 읽어오는데 실패했습니다.").isEqualTo(actualException.getMessage())
+            );
         } catch (IllegalAccessException e) {
             throw new RuntimeException(e);
         }

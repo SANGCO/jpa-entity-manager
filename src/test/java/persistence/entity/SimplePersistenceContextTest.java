@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import persistence.DatabaseTestBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static persistence.entity.Status.MANAGED;
 
 class SimplePersistenceContextTest extends DatabaseTestBase {
@@ -30,8 +31,10 @@ class SimplePersistenceContextTest extends DatabaseTestBase {
 
         Person persist1 = (Person) persistenceContext.getEntity(person.getId());
 
-        assertThat(persist1).isNull();
-        assertThat(persistenceContext.getEntityStatus(person)).isEqualTo(Status.DELETED);
+        assertAll(
+                () -> assertThat(persist1).isNull(),
+                () -> assertThat(persistenceContext.getEntityStatus(person)).isEqualTo(Status.DELETED)
+        );
     }
 
     @Test
@@ -44,8 +47,10 @@ class SimplePersistenceContextTest extends DatabaseTestBase {
         person.setName("new name");
         Person persist1 = (Person) persistenceContext.getDatabaseSnapshot(person.getId(), person);
 
-        assertThat(persist1.getName()).isEqualTo(person.getName());
-        assertThat(persistenceContext.getEntityStatus(persist1)).isEqualTo(MANAGED);
+        assertAll(
+                () -> assertThat(persist1.getName()).isEqualTo(person.getName()),
+                () -> assertThat(persistenceContext.getEntityStatus(persist1)).isEqualTo(MANAGED)
+        );
     }
 
 }

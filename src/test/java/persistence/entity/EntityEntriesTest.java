@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import persistence.DatabaseTestBase;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 
 class EntityEntriesTest extends DatabaseTestBase {
@@ -18,8 +19,10 @@ class EntityEntriesTest extends DatabaseTestBase {
 
         entityEntries.addOrChange(person, status);
 
-        assertThat(entityEntries.entityEntries).hasSize(1);
-        assertThat(entityEntries.entityEntries.get(person).getStatus()).isEqualTo(status);
+        assertAll(
+                () -> assertThat(entityEntries.entityEntries).hasSize(1),
+                () -> assertThat(entityEntries.entityEntries.get(person).getStatus()).isEqualTo(status)
+        );
     }
 
 }
